@@ -1,83 +1,111 @@
-# Cloudflare Tunnel with Docker Compose
+# Cloudflare Tunnel Docker Compose
 
-This project provides a simple way to run a Cloudflare Tunnel using Docker Compose. It securely exposes your local or internal services to the internet via Cloudflare's network.
+[![Docker Pulls](https://img.shields.io/docker/pulls/cloudflare/cloudflared)](https://hub.docker.com/r/cloudflare/cloudflared)
+[![GitHub issues](https://img.shields.io/github/issues/yourusername/cloudflared-docker-compose)](https://github.com/yourusername/cloudflared-docker-compose/issues)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-## Prerequisites
+## Table of Contents
+- [Quick Start](#quick-start)
+- [Configuration](#configuration)
+- [Environment Variables](#environment-variables)
+- [Usage Examples](#usage-examples)
+- [Updating](#updating)
+- [Security](#security)
+- [Contributing](#contributing)
+- [License](#license)
+- [References](#references)
 
-- [Docker](https://docs.docker.com/get-docker/) installed
-- [Docker Compose](https://docs.docker.com/compose/install/) installed
-- A Cloudflare account
-- A Cloudflare Tunnel token ([how to get one](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/create-tunnel/))
+## Quick Start
 
-## Setup Instructions
-
-1. **Clone this repository or copy the files to your server:**
+1. **Clone this repository:**
    ```bash
    git clone <your-repo-url>
    cd <your-folder>
    ```
-
-2. **Create a `.env` file:**
-   In the project directory, create a file named `.env` and add your Cloudflare Tunnel token:
-   ```env
-   CLOUDFLARED_TOKEN=your_cloudflare_tunnel_token_here
+2. **Copy the example environment file and fill in your token:**
+   ```bash
+   cp .env.example .env
+   # Edit .env and add your Cloudflare Tunnel token
    ```
-   > **Tip:** Never commit your `.env` file to version control. It contains sensitive credentials.
-
-3. **Review and customize `docker-compose.yml` if needed:**
-   - The container is named `cloudflared` for easy management.
-   - The restart policy is set to `always` to ensure high availability.
-   - The token is securely injected via environment variable.
-
-4. **Start the service:**
+3. **Start the service:**
    ```bash
    docker compose up -d
    ```
-   This will pull the latest `cloudflare/cloudflared` image and start the tunnel.
-
-5. **Check logs:**
+4. **Check logs:**
    ```bash
    docker compose logs -f cloudflared
    ```
-
-6. **Stop the service:**
+5. **Stop the service:**
    ```bash
    docker compose down
    ```
 
-## Best Practices
+## Configuration
 
-- **Keep your token secure:**
-  - Use environment variables or a `.env` file. Never hardcode secrets in your compose file.
-  - Do not share your token publicly.
-- **Update regularly:**
-  - The image uses `latest` tag. Periodically run `docker compose pull` to get updates.
-- **Monitor the tunnel:**
-  - Use `docker compose logs` to monitor for errors or connection issues.
-- **Use container names:**
-  - The container is named `cloudflared` for easy reference in Docker commands.
-- **Restart policy:**
-  - The `restart: always` policy ensures the tunnel restarts automatically if it crashes or the host reboots.
-- **Version control:**
-  - Exclude `.env` from your version control system (add it to `.gitignore`).
+- The container is named `cloudflared` for easy management.
+- The restart policy is set to `always` for high availability.
+- The token is securely injected via environment variable.
+- You can mount a custom config file or volume if needed (see Advanced Usage).
 
-## Troubleshooting
+## Environment Variables
 
-- **Tunnel not connecting?**
-  - Double-check your token in the `.env` file.
-  - Check your internet connection and firewall settings.
-- **Logs show errors?**
-  - Use `docker compose logs -f cloudflared` to view real-time logs.
-- **Need to update the token?**
-  - Edit the `.env` file and restart the service: `docker compose down && docker compose up -d`
+| Variable           | Description                        |
+|--------------------|------------------------------------|
+| CLOUDFLARED_TOKEN  | Your Cloudflare Tunnel token       |
+
+## Usage Examples
+
+### Basic Usage
+See Quick Start above.
+
+### Advanced: Custom Config File
+To use a custom `config.yml` for cloudflared, add a volume:
+```yaml
+services:
+  cloudflared:
+    # ...
+    volumes:
+      - ./config.yml:/etc/cloudflared/config.yml:ro
+```
+
+### Advanced: Docker Labels
+Add labels for management or monitoring:
+```yaml
+services:
+  cloudflared:
+    # ...
+    labels:
+      - "com.example.description=Cloudflare Tunnel"
+```
+
+## Updating
+
+To update to the latest image:
+```bash
+docker compose pull
+```
+Then restart:
+```bash
+docker compose up -d
+```
+
+## Security
+- **Keep your token secure:** Use environment variables or a `.env` file. Never hardcode secrets in your compose file.
+- **Rotate tokens regularly** and remove unused ones from your Cloudflare dashboard.
+- **Update images regularly** to get security patches.
+- **Do not expose unnecessary ports.**
+- **Monitor logs** for suspicious activity.
+
+## Contributing
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+- Fork the repo and create a feature branch.
+- Open a pull request with a clear description.
+- Use the issue tracker for bugs and feature requests.
+
+## License
+MIT. See [LICENSE](LICENSE).
 
 ## References
 - [Cloudflare Tunnel Documentation](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/)
 - [cloudflared Docker Hub](https://hub.docker.com/r/cloudflare/cloudflared)
-
----
-
-**Security Reminder:**
-- Never share your Cloudflare Tunnel token.
-- Always use environment variables for secrets.
-- Regularly update your images and monitor logs for suspicious activity. 
+- [container-cloudflare-tunnel (inspiration)](https://github.com/jonas-merkle/container-cloudflare-tunnel) 
