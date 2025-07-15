@@ -1,6 +1,6 @@
 # Ignore environment files
 .env
-
+config.yml
 # Ignore node_modules and other common directories
 node_modules/
 .DS_Store
