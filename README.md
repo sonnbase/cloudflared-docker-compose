@@ -1,7 +1,7 @@
 # Cloudflare Tunnel Docker Compose
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/cloudflare/cloudflared)](https://hub.docker.com/r/cloudflare/cloudflared)
-[![GitHub issues](https://img.shields.io/github/issues/yourusername/cloudflared-docker-compose)](https://github.com/yourusername/cloudflared-docker-compose/issues)
+[![GitHub issues](https://img.shields.io/github/issues/sonnbase/cloudflared-docker-compose)](https://github.com/sonnbase/cloudflared-docker-compose/issues)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ## Table of Contents
