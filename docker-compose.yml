@@ -7,3 +7,4 @@ services:
       - CLOUDFLARED_TOKEN
     restart: always
     container_name: cloudflared 
+    network_mode: "host"
